@@ -1,0 +1,4 @@
+Jannuar22_BL_sim=           [([0:1:56879]*5)' BLfixed]
+Jannuar22Abweichung=BLSOLLC-BLISTC
+
+Jannuar22_Abweichung_Sim=   [([0:1:56879]*5)' Jannuar22Abweichung]
