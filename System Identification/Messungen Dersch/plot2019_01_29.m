@@ -43,7 +43,7 @@ set( p3(1), 'Position', pos ) ;
 
 p4=subplot(6,1,4)
 
-plot(DatumUhrzeit,Kohlegewichtkg)
+plot(DatumUhrzeit,Kohlegewicht)
 grid on
 legend("Behälter [kg]",'Location','southwest')
 
@@ -89,22 +89,44 @@ linkaxes([p1,p2,p3,p4,p5,p6],'x')
 
 
 figure
-p21=subplot(3,1,1)
+p21=subplot(4,1,1)
 plot(DatumUhrzeit,KohleISTKgh)
 legend("KohleISTKgh",'Location','northwest')
 axis tight
 grid on
 
-p22=subplot(3,1,2)
+p22=subplot(4,1,2)
+plot(DatumUhrzeit,BefllungEin1)
+legend("BefllungEin1",'Location','northwest')
+axis tight
+grid on
+
+p23=subplot(4,1,3)
 plot(DatumUhrzeit,Kohlegewichtkg)
 legend("Kohlegewicht",'Location','northwest')
 axis tight
 grid on
 
-p23=subplot(3,1,3)
+p24=subplot(4,1,4)
 plot(DatumUhrzeit,KohlegewichtkgDiff)
 legend("KohlegewichtkgDiff",'Location','northwest')
 axis tight
 grid on
-linkaxes([p21,p22,p23],'x')
+linkaxes([p21,p22,p23,p24],'x')
 
+figure
+
+p31=subplot(2,1,1)
+plot(DatumUhrzeit,BLSOLLC,DatumUhrzeit,BLISTC,'LineWidth',2)
+grid on
+legend("Bl soll [°C]","Bl ist [°C]",'Location','southwest')
+axis tight
+
+p32=subplot(2,1,2)
+plot(DatumUhrzeit,SaugzAbgas)
+legend("SaugzAbgas",'Location','northwest')
+axis tight
+grid on
+
+
+linkaxes([p31,p32],'x')

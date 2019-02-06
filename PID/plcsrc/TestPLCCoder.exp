@@ -1,0 +1,48 @@
+(*
+ *
+ * File: TestPLCCoder.exp
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "TestPLCCoder/Subsystem1"
+ *
+ * Model name                      : TestPLCCoder
+ * Model version                   : 1.0
+ * Model creator                   : Trips
+ * Model last modified by          : Trips
+ * Model last modified on          : Mon Feb 04 14:01:45 2019
+ * Model sample time               : 0.1s
+ * Subsystem name                  : TestPLCCoder/Subsystem1
+ * Subsystem sample time           : 0.1s
+ * Simulink PLC Coder version      : 2.6 (R2018b) 24-May-2018
+ * ST code generated on            : Mon Feb 04 14:13:18 2019
+ *
+ * Target IDE selection            : 3S CoDeSys 2.3
+ * Test Bench included             : No
+ *
+ *)
+FUNCTION_BLOCK Subsystem1
+VAR_INPUT
+    ssMethodType: SINT;
+    In1: LREAL;
+END_VAR
+VAR_OUTPUT
+    Out1: LREAL;
+END_VAR
+VAR
+    DiscreteTransferFcn1_states: LREAL;
+END_VAR
+CASE ssMethodType OF
+    SS_INITIALIZE: 
+        (* InitializeConditions for DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn1' *)
+        DiscreteTransferFcn1_states := 0.0;
+    SS_STEP: 
+        (* Outport: '<Root>/Out1' incorporates:
+         *  DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn1' *)
+        Out1 := 0.1 * DiscreteTransferFcn1_states;
+        (* Update for DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn1' *)
+        DiscreteTransferFcn1_states := In1 - (-0.9 * DiscreteTransferFcn1_states);
+END_CASE;
+END_FUNCTION_BLOCK
+VAR_GLOBAL CONSTANT
+    SS_INITIALIZE: SINT := 0;
+    SS_STEP: SINT := 1;
+END_VAR
