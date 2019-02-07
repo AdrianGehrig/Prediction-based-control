@@ -88,45 +88,69 @@ linkaxes([p1,p2,p3,p4,p5,p6],'x')
 
 
 
+% figure
+% p21=subplot(4,1,1)
+% plot(DatumUhrzeit,KohleISTKgh)
+% legend("KohleISTKgh",'Location','northwest')
+% axis tight
+% grid on
+% 
+% p22=subplot(4,1,2)
+% plot(DatumUhrzeit,BefllungEin1)
+% legend("BefllungEin1",'Location','northwest')
+% axis tight
+% grid on
+% 
+% p23=subplot(4,1,3)
+% plot(DatumUhrzeit,Kohlegewicht)
+% legend("Kohlegewicht",'Location','northwest')
+% axis tight
+% grid on
+% 
+% p24=subplot(4,1,4)
+% plot(DatumUhrzeit,KohlegewichtkgDiff)
+% legend("KohlegewichtkgDiff",'Location','northwest')
+% axis tight
+% grid on
+% linkaxes([p21,p22,p23,p24],'x')
+% 
+% figure
+% 
+% p31=subplot(2,1,1)
+% plot(DatumUhrzeit,BLSOLLC,DatumUhrzeit,BLISTC,'LineWidth',2)
+% grid on
+% legend("Bl soll [°C]","Bl ist [°C]",'Location','southwest')
+% axis tight
+% 
+% p32=subplot(2,1,2)
+% plot(DatumUhrzeit,SaugzAbgas)
+% legend("SaugzAbgas",'Location','northwest')
+% axis tight
+% grid on
+% 
+% 
+% linkaxes([p31,p32],'x')
+
+
 figure
-p21=subplot(4,1,1)
-plot(DatumUhrzeit,KohleISTKgh)
-legend("KohleISTKgh",'Location','northwest')
-axis tight
+ 
+p31=subplot(3,1,1)
+plot(DatumUhrzeit,BL,DatumUhrzeit,Gas,'LineWidth',2)
 grid on
-
-p22=subplot(4,1,2)
-plot(DatumUhrzeit,BefllungEin1)
-legend("BefllungEin1",'Location','northwest')
-axis tight
-grid on
-
-p23=subplot(4,1,3)
-plot(DatumUhrzeit,Kohlegewichtkg)
-legend("Kohlegewicht",'Location','northwest')
-axis tight
-grid on
-
-p24=subplot(4,1,4)
-plot(DatumUhrzeit,KohlegewichtkgDiff)
-legend("KohlegewichtkgDiff",'Location','northwest')
-axis tight
-grid on
-linkaxes([p21,p22,p23,p24],'x')
-
-figure
-
-p31=subplot(2,1,1)
-plot(DatumUhrzeit,BLSOLLC,DatumUhrzeit,BLISTC,'LineWidth',2)
-grid on
-legend("Bl soll [°C]","Bl ist [°C]",'Location','southwest')
+legend("Bl [%]","Gas [%]",'Location','southwest')
 axis tight
 
-p32=subplot(2,1,2)
-plot(DatumUhrzeit,SaugzAbgas)
-legend("SaugzAbgas",'Location','northwest')
-axis tight
+p32=subplot(3,1,2)
+plot(DatumUhrzeit,BL./Gas,'LineWidth',2)
 grid on
+legend("Verhältnis Brennerleistung zu Gas ",'Location','southwest')
+axis tight
+
+p33=subplot(3,1,3)
+plot(DatumUhrzeit,GasISTNmh,DatumUhrzeit,GasSOLLNmh,'LineWidth',2)
+grid on
+legend("GasIstnmH [nmH]","GasSollnmH[nmH]",'Location','southwest')
+axis tight
 
 
-linkaxes([p31,p32],'x')
+linkaxes([p31,p32,p33],'x')

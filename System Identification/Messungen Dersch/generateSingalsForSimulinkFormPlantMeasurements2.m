@@ -1,8 +1,5 @@
 
-Startpunkt=find(Brennerleistung_Uhrzeit=='05-Feb-2019 10:36:43')
-
-
-Feb05_BL_sim=           [([Startpunkt:1:'end']*5)' BL];
+Jannuar22_BL_sim=           [([0:1:68646]*5)' BLfixed];
 
 find(isnan(BLSOLLC)) % Es befinden sich NaN in der Messung
 BLSOLLCfixed=fillmissing(BLSOLLC,'pchip'); % NaN interpolieren

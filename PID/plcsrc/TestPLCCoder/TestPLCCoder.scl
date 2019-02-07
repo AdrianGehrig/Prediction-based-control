@@ -1,0 +1,44 @@
+(*
+ *
+ * File: TestPLCCoder.scl
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "TestPLCCoder/PT1"
+ *
+ * Model name                      : TestPLCCoder
+ * Model version                   : 1.1
+ * Model creator                   : Trips
+ * Model last modified by          : Trips
+ * Model last modified on          : Mon Feb 04 14:14:27 2019
+ * Model sample time               : 0.1s
+ * Subsystem name                  : TestPLCCoder/PT1
+ * Subsystem sample time           : 0.1s
+ * Simulink PLC Coder version      : 2.6 (R2018b) 24-May-2018
+ * ST code generated on            : Wed Feb 06 16:13:48 2019
+ *
+ * Target IDE selection            : Siemens SIMATIC Step 7
+ * Test Bench included             : No
+ *
+ *)
+FUNCTION_BLOCK PT1
+VAR_INPUT
+    ssMethodType: INT;
+    In1: REAL;
+END_VAR
+VAR_OUTPUT
+    Out1: REAL;
+END_VAR
+VAR
+    c_DiscreteTransferFc: REAL;
+END_VAR
+CASE ssMethodType OF
+    0: 
+        (* InitializeConditions for DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn1' *)
+        c_DiscreteTransferFc := 0.0;
+    1: 
+        (* Outport: '<Root>/Out1' incorporates:
+         *  DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn1' *)
+        Out1 := 0.1 * c_DiscreteTransferFc;
+        (* Update for DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn1' *)
+        c_DiscreteTransferFc := In1 - (-0.9 * c_DiscreteTransferFc);
+END_CASE;
+END_FUNCTION_BLOCK
