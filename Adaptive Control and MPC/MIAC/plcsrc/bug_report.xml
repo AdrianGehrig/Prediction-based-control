@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project><!--(*
+ *
+ * File: bug_report.xml
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "bug_report/PLC Code Generation not working with Siemens but is working with CoDeSys "
+ *
+ * Model name                      : bug_report
+ * Model version                   : 1.2
+ * Model creator                   : Trips
+ * Model last modified by          : Trips
+ * Model last modified on          : Fri Mar 01 14:32:40 2019
+ * Model sample time               : 1s
+ * Subsystem name                  : bug_report/PLC Code Generation not working with Siemens but is working with CoDeSys 
+ * Subsystem sample time           : 1s
+ * Simulink PLC Coder version      : 2.6 (R2018b) 24-May-2018
+ * ST code generated on            : Fri Mar 01 14:51:21 2019
+ *
+ * Target IDE selection            : 3S CoDeSys 3.5
+ * Test Bench included             : No
+ *
+ *)
+-->
+   <fileHeader companyName="The Mathworks, Inc." companyURL="www.mathworks.com" contentDescription="" creationDateTime="2019-03-01T14:51:21" productName="Simulink PLC Coder" productRelease="(R2018b)" productVersion="2.6"/>
+   <contentHeader name="bug_report">
+      <coordinateInfo>
+         <fbd>
+            <scaling x="0" y="0"/>
+         </fbd>
+         <ld>
+            <scaling x="0" y="0"/>
+         </ld>
+         <sfc>
+            <scaling x="0" y="0"/>
+         </sfc>
+      </coordinateInfo>
+   </contentHeader>
+   <types>
+      <dataTypes>
+         <dataType name="c_c_recursiveEstimation_int">
+            <baseType>
+               <struct>
+                  <variable name="IteratorPosition">
+                     <type>
+                        <DINT/>
+                     </type>
+                  </variable>
+               </struct>
+            </baseType>
+         </dataType>
+         <dataType name="c_d_recursiveEstimation_int">
+            <baseType>
+               <struct>
+                  <variable name="OutputDataIterator">
+                     <type>
+                        <derived name="c_c_recursiveEstimation_int"/>
+                     </type>
+                  </variable>
+                  <variable name="InputDataIterator">
+                     <type>
+                        <derived name="c_c_recursiveEstimation_int"/>
+                     </type>
+                  </variable>
+               </struct>
+            </baseType>
+         </dataType>
+      </dataTypes>
+      <pous>
+         <pou name="PLC" pouType="functionBlock">
+            <interface>
+               <inputVars>
+                  <variable name="ssMethodType">
+                     <type>
+                        <SINT/>
+                     </type>
+                  </variable>
+                  <variable name="Input">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="Input1">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="Input2">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="Input3">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="Input4">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+               </inputVars>
+               <outputVars>
+                  <variable name="Gain_Not_Filtered">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+               </outputVars>
+               <localVars>
+                  <variable name="icLoad">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="icLoad_b">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="icLoad_m">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="icLoad_n">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="icLoad_k">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="icLoad_e">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="arxEstimator_not_empty">
+                     <type>
+                        <BOOL/>
+                     </type>
+                  </variable>
+                  <variable name="arxEstimator">
+                     <type>
+                        <derived name="c_d_recursiveEstimation_int"/>
+                     </type>
+                  </variable>
+                  <variable name="delayTheta_Reset_ZCE">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="delayL_Reset_ZCE">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="delayPhi_Reset_ZCE">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="delayBufferU_Reset_ZCE">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="delayBufferY_Reset_ZCE">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="c_delayBufferRegressors_Res">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="Delay_Reset_ZCE">
+                     <type>
+                        <USINT/>
+                     </type>
+                     <initialValue>
+                        <simpleValue value="3"/>
+                     </initialValue>
+                  </variable>
+                  <variable name="delayL_DSTATE">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="8"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="delayTheta_DSTATE">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="2"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="delayPhi_DSTATE">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="3"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="i0_ZCFCN_d_RISING">
+                     <type>
+                        <derived name="ZCFCN_d_RISING"/>
+                     </type>
+                  </variable>
+                  <variable name="phi">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="2"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="K">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="2"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="fTr">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="2"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="a1">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="sqrtA0overA1">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="sqrtA0timesA1">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="u">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="kk">
+                     <type>
+                        <DINT/>
+                     </type>
+                  </variable>
+                  <variable name="rtb_y">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="8"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="rtb_phiMemory">
+                     <type>
+                        <array>
+                           <dimension lower="0" upper="3"/>
+                           <baseType>
+                              <LREAL/>
+                           </baseType>
+                        </array>
+                     </type>
+                  </variable>
+                  <variable name="K_tmp">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+                  <variable name="K_tmp_0">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+               </localVars>
+            </interface>
+            <body>
+               <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">
+<![CDATA[
+CASE ssMethodType OF
+    SS_INITIALIZE: 
+        (* InitializeConditions for Delay: '<S3>/delayTheta' *)
+        icLoad := 1;
+        (* InitializeConditions for Delay: '<S3>/delayL' *)
+        icLoad_b := 1;
+        (* InitializeConditions for Delay: '<S3>/delayPhi' *)
+        icLoad_m := 1;
+        (* InitializeConditions for Delay: '<S3>/delayBufferU' *)
+        icLoad_n := 1;
+        (* InitializeConditions for Delay: '<S3>/delayBufferY' *)
+        icLoad_k := 1;
+        (* InitializeConditions for Delay: '<S23>/delayBufferRegressors' *)
+        icLoad_e := 1;
+        (* SystemInitialize for MATLAB Function: '<S23>/rarx' *)
+        arxEstimator_not_empty := FALSE;
+    SS_STEP: 
+        (* Delay: '<S3>/delayTheta' *)
+        (* idRecursiveEstimationProcessParametersRarx Helper function to construct *)
+        (* the vector of free estimated parameters from the A and B polynomials. *)
+        (* MATLAB Function 'Recursive Estimation/rarxProcessInitialParameters/rarxProcessInitialParameters': '<S42>:1' *)
+        (* Copyright 2013-2015 The MathWorks, Inc. *)
+        (* #codegen *)
+        (* '<S42>:1:9' coder.extrinsic('idRecursiveEstimationProcessParametersRarx_double_mex'); *)
+        (* '<S42>:1:10' coder.extrinsic('idRecursiveEstimationProcessParametersRarx_single_mex'); *)
+        (* '<S42>:1:11' if coder.target('Sfun') &amp;&amp; ~coder.target('RtwForRapid') &amp;&amp; ~coder.target('RtwForSim') *)
+        (* '<S42>:1:21' else *)
+        (* Use M code for code generation *)
+        (* '<S42>:1:23' theta = idRecursiveEstimationProcessParametersRarx(A,B,... *)
+        (* '<S42>:1:24'         na,nb,nk,nParameters); *)
+        i0_ZCFCN_d_RISING(u0 := delayTheta_Reset_ZCE, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        delayTheta_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+
+        IF kk <> 0 THEN 
+            icLoad := 1;
+        END_IF;
+
+
+        IF icLoad <> 0 THEN 
+            delayTheta_DSTATE[0] := 2.2204460492503131E-16;
+            delayTheta_DSTATE[1] := 2.2204460492503131E-16;
+            delayTheta_DSTATE[2] := 2.2204460492503131E-16;
+        END_IF;
+
+        (* Outputs for Atomic SubSystem: '<S3>/ProcessInitialCovariance' *)
+        (* MATLAB Function: '<S26>/ScalarExpansion' *)
+        (* ctrlScalarExpansion Helper function for scalar expansion. *)
+        
+        (* y  = ctrlScalarExpansion(u,n) *)
+        (* An n-ny-n matrix y is created based on u. If u is a scalar, y has u  *)
+        (* on its diagonals. If u is a vector, y has the elements of u on its *)
+        (* diagonals. If u is a matrix y = (u+u.')/2.  *)
+        (* When u is scalar or vector, we enforce symmetric positive-definiteness. *)
+        (* When u is a matrix, we enly enforce symmetry.  *)
+        (* MATLAB Function 'Utilities/ScalarExpansion/ScalarExpansion': '<S41>:1' *)
+        (* Copyright 2014-2015 The MathWorks, Inc. *)
+        (* '<S41>:1:16' y = ctrlScalarExpansion(u,n,IsStrictPositiveDefinite,OutputSquareRootY); *)
+        u := Input4;
+        (* End of Outputs for SubSystem: '<S3>/ProcessInitialCovariance' *)
+        (* Outputs for Atomic SubSystem: '<S3>/ProcessInitialCovariance' *)
+        (* MATLAB Function: '<S26>/ScalarExpansion' *)
+
+        FOR kk := 0 TO 8 DO 
+            rtb_y[kk] := 0.0;
+        END_FOR;
+
+
+        IF Input4 <= 0.0 THEN 
+            u := 2.2204460492503131E-16;
+        END_IF;
+
+        u := SQRT(u);
+        rtb_y[0] := u;
+        rtb_y[4] := u;
+        rtb_y[8] := u;
+        (* End of Outputs for SubSystem: '<S3>/ProcessInitialCovariance' *)
+        
+
+        (* Delay: '<S3>/delayL' *)
+        i0_ZCFCN_d_RISING(u0 := delayL_Reset_ZCE, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        delayL_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+
+        IF kk <> 0 THEN 
+            icLoad_b := 1;
+        END_IF;
+
+
+        IF icLoad_b <> 0 THEN 
+
+            FOR kk := 0 TO 8 DO 
+                delayL_DSTATE[kk] := rtb_y[kk];
+            END_FOR;
+
+        END_IF;
+
+        (* Delay: '<S3>/delayPhi' *)
+        i0_ZCFCN_d_RISING(u0 := delayPhi_Reset_ZCE, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        delayPhi_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+
+        IF kk <> 0 THEN 
+            icLoad_m := 1;
+        END_IF;
+
+
+        IF icLoad_m <> 0 THEN 
+            delayPhi_DSTATE[0] := 0.0;
+            delayPhi_DSTATE[1] := 0.0;
+            delayPhi_DSTATE[2] := 0.0;
+            delayPhi_DSTATE[3] := 0.0;
+        END_IF;
+
+        (* Delay: '<S3>/delayBufferU' *)
+        i0_ZCFCN_d_RISING(u0 := delayBufferU_Reset_ZCE, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        delayBufferU_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+
+        IF kk <> 0 THEN 
+            icLoad_n := 1;
+        END_IF;
+
+        (* End of Delay: '<S3>/delayBufferU' *)
+        
+
+        (* Delay: '<S3>/delayBufferY' *)
+        i0_ZCFCN_d_RISING(u0 := delayBufferY_Reset_ZCE, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        delayBufferY_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+
+        IF kk <> 0 THEN 
+            icLoad_k := 1;
+        END_IF;
+
+        (* End of Delay: '<S3>/delayBufferY' *)
+        
+
+        (* Delay: '<S23>/delayBufferRegressors' *)
+        (* MATLAB Function 'Recursive Estimation/InitializeRegressorsFromSignalsARX/CalculateInitialRegressors': '<S39>:1' *)
+        (* '<S39>:1:3' if algorithmParams.windowLength==0 *)
+        (* Infinite-history estimator *)
+        
+        (* H0 is unused *)
+        (* '<S39>:1:7' H0 = cast(0,'like',yMemory); *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferRegressors_Res, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferRegressors_Res := i0_ZCFCN_d_RISING.y1;
+
+        IF kk <> 0 THEN 
+            icLoad_e := 1;
+        END_IF;
+
+        (* End of Delay: '<S23>/delayBufferRegressors' *)
+        
+
+        (* Delay: '<S25>/Delay' *)
+        i0_ZCFCN_d_RISING(u0 := Delay_Reset_ZCE, u1 := Input3);
+        kk := i0_ZCFCN_d_RISING.y0;
+        Delay_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        (* MATLAB Function: '<S23>/rarx' incorporates:
+         *  DataTypeConversion: '<S3>/DataTypeConversionEnable'
+         *  Delay: '<S3>/delayL'
+         *  Delay: '<S3>/delayPhi'
+         *  Delay: '<S3>/delayTheta' *)
+
+        FOR kk := 0 TO 8 DO 
+            rtb_y[kk] := delayL_DSTATE[kk];
+        END_FOR;
+
+        K[0] := delayTheta_DSTATE[0];
+        K[1] := delayTheta_DSTATE[1];
+        K[2] := delayTheta_DSTATE[2];
+        (* % Was a reset trigered? *)
+        (* MATLAB Function 'Recursive Estimation/rarx/rarx': '<S38>:1' *)
+        (* Copyright 2015-2018 The MathWorks, Inc. *)
+        (* Get the estimator object. Use the arx estimator with nb=0 *)
+        (* '<S38>:1:17' if isempty(arxEstimator) *)
+
+        IF  NOT arxEstimator_not_empty THEN 
+            (* '<S38>:1:18' arxEstimator = recursiveEstimation.internal.rpoly.getEstimator(... *)
+            (* '<S38>:1:19'         'arx',... *)
+            (* '<S38>:1:20'         algorithmParams); *)
+            arxEstimator_not_empty := TRUE;
+        END_IF;
+
+        (* If user triggered a reset, communicate this to the estimator *)
+        (* '<S38>:1:24' if hasTriggeredReset *)
+        (* Update algorithm states, perform estimation *)
+        (* % States *)
+        (* % new IO data *)
+        (* '<S38>:1:31' [phiMemory, uMemory, yMemory, regressorsMemory, ... *)
+        (* '<S38>:1:32'     theta, L, ... *)
+        (* '<S38>:1:33'     A, B, e] = ... *)
+        (* '<S38>:1:34'     arxEstimator.estimate(... *)
+        (* '<S38>:1:35'     phiMemory, uMemory, yMemory, regressorsMemory, theta, L, ... % States *)
+        (* '<S38>:1:36'     yMeas, uMeas,... % new IO data *)
+        (* '<S38>:1:37'     isEnabled, adg1, adg2, algorithmParams); *)
+        arxEstimator.OutputDataIterator.IteratorPosition := 1;
+        arxEstimator.InputDataIterator.IteratorPosition := 1;
+        arxEstimator.OutputDataIterator.IteratorPosition := MIN(arxEstimator.OutputDataIterator.IteratorPosition + 1, 2);
+        arxEstimator.InputDataIterator.IteratorPosition := MIN(arxEstimator.InputDataIterator.IteratorPosition + 1, 2);
+        u := Input1 - (((delayPhi_DSTATE[0] * delayTheta_DSTATE[0]) + (delayPhi_DSTATE[1] * delayTheta_DSTATE[1])) + (delayPhi_DSTATE[3] * delayTheta_DSTATE[2]));
+
+        IF Input2 <> 0.0 THEN 
+
+            FOR kk := 0 TO 2 DO 
+                fTr[kk] := (delayL_DSTATE[(3 * kk) + 2] * delayPhi_DSTATE[3]) + ((delayL_DSTATE[(3 * kk) + 1] * delayPhi_DSTATE[1]) + (delayL_DSTATE[3 * kk] * delayPhi_DSTATE[0]));
+            END_FOR;
+
+            phi[0] := 0.0;
+            K[0] := 0.0;
+            phi[1] := 0.0;
+            K[1] := 0.0;
+            a1 := (fTr[2] * fTr[2]) + 1.0;
+            sqrtA0overA1 := SQRT(1.0 / a1);
+            K[2] := rtb_y[8] * fTr[2];
+            rtb_y[8] := (rtb_y[8] * sqrtA0overA1) - (0.0 / (sqrtA0overA1 * a1));
+            phi[2] := K[2];
+            sqrtA0overA1 := a1;
+            a1 := (fTr[1] * fTr[1]) + a1;
+            sqrtA0overA1 := SQRT(sqrtA0overA1 / a1);
+            sqrtA0timesA1 := sqrtA0overA1 * a1;
+
+            FOR kk := 0 TO 1 DO 
+                K_tmp := rtb_y[5 - kk];
+                K_tmp_0 := phi[2 - kk];
+                K[2 - kk] := (K_tmp * fTr[1]) + K_tmp_0;
+                rtb_y[5 - kk] := (K_tmp * sqrtA0overA1) - ((K_tmp_0 * fTr[1]) / sqrtA0timesA1);
+                phi[2 - kk] := K[2 - kk];
+            END_FOR;
+
+            sqrtA0overA1 := a1;
+            a1 := (fTr[0] * fTr[0]) + a1;
+            sqrtA0overA1 := SQRT(sqrtA0overA1 / a1);
+            sqrtA0timesA1 := sqrtA0overA1 * a1;
+
+            FOR kk := 0 TO 2 DO 
+                K_tmp := rtb_y[2 - kk];
+                K_tmp_0 := phi[2 - kk];
+                K[2 - kk] := (K_tmp * fTr[0]) + K_tmp_0;
+                rtb_y[2 - kk] := (K_tmp * sqrtA0overA1) - ((K_tmp_0 * fTr[0]) / sqrtA0timesA1);
+                phi[2 - kk] := K[2 - kk];
+            END_FOR;
+
+            K[0] := K[0] / a1;
+            K[1] := K[1] / a1;
+            K[0] := (K[0] * u) + delayTheta_DSTATE[0];
+            K[1] := (K[1] * u) + delayTheta_DSTATE[1];
+            K[2] := ((K[2] / a1) * u) + delayTheta_DSTATE[2];
+        END_IF;
+
+        rtb_phiMemory[2] := delayPhi_DSTATE[1];
+        rtb_phiMemory[1] := delayPhi_DSTATE[0];
+        (* Outputs for Atomic SubSystem: '<S1>/Calculate DC Gain1' *)
+        (* Product: '<S2>/Divide' incorporates:
+         *  MATLAB Function: '<S23>/rarx'
+         *  Sum: '<S2>/A(z) Sum of Elements' *)
+        (* helper variables *)
+        Gain_Not_Filtered := K[2] / ((1.0 + K[0]) + K[1]);
+        (* Saturate: '<S2>/Gain_Saturation' *)
+
+        IF Gain_Not_Filtered >= 1.5 THEN 
+            (* Outport: '<Root>/Gain_Not_Filtered' *)
+            Gain_Not_Filtered := 1.5;
+        ELSIF Gain_Not_Filtered <= 0.01 THEN 
+            (* Outport: '<Root>/Gain_Not_Filtered' *)
+            Gain_Not_Filtered := 0.01;
+        END_IF;
+
+        (* End of Saturate: '<S2>/Gain_Saturation' *)
+        (* End of Outputs for SubSystem: '<S1>/Calculate DC Gain1' *)
+        
+
+        (* Update for Delay: '<S3>/delayTheta' *)
+        icLoad := 0;
+        delayTheta_DSTATE[0] := K[0];
+        delayTheta_DSTATE[1] := K[1];
+        delayTheta_DSTATE[2] := K[2];
+        (* Update for Delay: '<S3>/delayL' *)
+        icLoad_b := 0;
+        (* Update for Delay: '<S3>/delayL' *)
+
+        FOR kk := 0 TO 8 DO 
+            delayL_DSTATE[kk] := rtb_y[kk];
+        END_FOR;
+
+        (* Update for Delay: '<S3>/delayPhi' incorporates:
+         *  MATLAB Function: '<S23>/rarx' *)
+        icLoad_m := 0;
+        delayPhi_DSTATE[0] :=  -Input1;
+        delayPhi_DSTATE[1] := rtb_phiMemory[1];
+        delayPhi_DSTATE[2] := rtb_phiMemory[2];
+        delayPhi_DSTATE[3] := Input;
+        (* Update for Delay: '<S3>/delayBufferU' *)
+        icLoad_n := 0;
+        (* Update for Delay: '<S3>/delayBufferY' *)
+        icLoad_k := 0;
+        (* Update for Delay: '<S23>/delayBufferRegressors' *)
+        icLoad_e := 0;
+END_CASE;
+
+]]>
+</xhtml>
+               </ST>
+            </body>
+         </pou>
+         <pou name="ZCFCN_d_RISING" pouType="functionBlock">
+            <interface>
+               <inputVars>
+                  <variable name="u0">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+                  <variable name="u1">
+                     <type>
+                        <LREAL/>
+                     </type>
+                  </variable>
+               </inputVars>
+               <outputVars>
+                  <variable name="y0">
+                     <type>
+                        <DINT/>
+                     </type>
+                  </variable>
+                  <variable name="y1">
+                     <type>
+                        <USINT/>
+                     </type>
+                  </variable>
+               </outputVars>
+               <localVars>
+                  <variable name="rising">
+                     <type>
+                        <BOOL/>
+                     </type>
+                  </variable>
+                  <variable name="temp1">
+                     <type>
+                        <BOOL/>
+                     </type>
+                  </variable>
+                  <variable name="temp2">
+                     <type>
+                        <BOOL/>
+                     </type>
+                  </variable>
+               </localVars>
+            </interface>
+            <body>
+               <ST>
+                  <xhtml xmlns="http://www.w3.org/1999/xhtml">
+<![CDATA[temp1 := FALSE;
+
+IF u1 > 0.0 THEN 
+    y1 := 1;
+ELSIF u1 < 0.0 THEN 
+    y1 := 2;
+ELSE 
+    y1 := 0;
+END_IF;
+
+temp2 := FALSE;
+
+IF u0 = 2 THEN 
+
+    IF y1 = 0 THEN 
+        rising := TRUE;
+    ELSIF y1 = 1 THEN 
+        rising := TRUE;
+    ELSE 
+        temp2 := TRUE;
+    END_IF;
+
+ELSE 
+    temp2 := TRUE;
+END_IF;
+
+
+IF temp2 THEN 
+
+    IF u0 = 0 THEN 
+
+        IF y1 = 1 THEN 
+            rising := TRUE;
+        ELSE 
+            temp1 := TRUE;
+        END_IF;
+
+    ELSE 
+        temp1 := TRUE;
+    END_IF;
+
+END_IF;
+
+
+IF temp1 THEN 
+
+    IF u0 = 101 THEN 
+
+        IF y1 = 1 THEN 
+            rising := TRUE;
+        ELSE 
+            rising := FALSE;
+        END_IF;
+
+    ELSE 
+        rising := FALSE;
+    END_IF;
+
+END_IF;
+
+
+IF rising THEN 
+    y0 := 1;
+ELSE 
+    y0 := 0;
+END_IF;
+
+
+IF (u0 = 2) AND (y1 = 0) THEN 
+    y1 := 100;
+END_IF;
+
+]]>
+</xhtml>
+               </ST>
+            </body>
+         </pou>
+      </pous>
+   </types>
+   <instances>
+      <configurations/>
+   </instances>
+   <addData>
+      <data handleUnknown="implementation" name="http://www.3s-software.com/plcopenxml/globalvars">
+         <globalVars constant="true" name="GVL_CONSTS">
+            <variable name="SS_INITIALIZE">
+               <type>
+                  <SINT/>
+               </type>
+               <initialValue>
+                  <simpleValue value="0"/>
+               </initialValue>
+            </variable>
+            <variable name="SS_STEP">
+               <type>
+                  <SINT/>
+               </type>
+               <initialValue>
+                  <simpleValue value="1"/>
+               </initialValue>
+            </variable>
+         </globalVars>
+      </data>
+      <data handleUnknown="implementation" name="http://www.3s-software.com/plcopenxml/globalvars">
+         <globalVars name="GVL_VARS"/>
+      </data>
+   </addData>
+   <addData>
+      <data handleUnknown="discard" name="http://www.3s-software.com/plcopenxml/projectstructure">
+         <ProjectStructure>
+            <Object Name="GVL_CONSTS"/>
+            <Object Name="GVL_VARS"/>
+            <Object Name="PLC"/>
+            <Object Name="ZCFCN_d_RISING"/>
+         </ProjectStructure>
+      </data>
+   </addData>
+</project>
