@@ -1,0 +1,97 @@
+(*
+ *
+ * File: FOPDT_Tustin.scl
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "FOPDT_Tustin/FOPDT_Tustin"
+ *
+ * Model name                      : FOPDT_Tustin
+ * Model version                   : 1.11
+ * Model creator                   : Trips
+ * Model last modified by          : Trips
+ * Model last modified on          : Mon Mar 04 23:33:50 2019
+ * Model sample time               : 1s
+ * Subsystem name                  : FOPDT_Tustin/FOPDT_Tustin
+ * Subsystem sample time           : 1s
+ * Simulink PLC Coder version      : 2.6 (R2018b) 24-May-2018
+ * ST code generated on            : Mon Mar 04 23:34:12 2019
+ *
+ * Target IDE selection            : Siemens SIMATIC Step 7
+ * Test Bench included             : No
+ *
+ *)
+FUNCTION_BLOCK FOPDT_Tustin0
+VAR_INPUT
+    ssMethodType: INT;
+    FOPD_Input: REAL;
+    Gain_System: REAL;
+    Time_Constant_System: REAL;
+    Sample_Time: REAL;
+    Dead_Time: REAL;
+END_VAR
+VAR_OUTPUT
+    FOPD_Output: REAL;
+END_VAR
+VAR
+    DiscreteTransferFcnv: REAL;
+    c_TmpSignalConversio: ARRAY [0..1] OF REAL;
+    Delay_DSTATE: ARRAY [0..799] OF REAL;
+    d_TmpSignalConversio: ARRAY [0..1] OF REAL;
+    rtb_Gain: REAL;
+    rtb_Divide: REAL;
+    b_i: DINT;
+END_VAR
+CASE ssMethodType OF
+    0: 
+        (* InitializeConditions for DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn' *)
+        DiscreteTransferFcnv := 0.0;
+        (* InitializeConditions for Delay: '<S1>/Delay' *)
+        FOR b_i := 0 TO 799 DO 
+            Delay_DSTATE[b_i] := 0.0;
+        END_FOR;
+        (* End of InitializeConditions for Delay: '<S1>/Delay' *)
+    1: 
+        (* Gain: '<S1>/Gain' *)
+        rtb_Gain := 2.0 * Time_Constant_System;
+        (* Product: '<S1>/Divide' incorporates:
+         *  Product: '<S1>/Multiply'
+         *  Sum: '<S1>/Add' *)
+        rtb_Divide := (Gain_System * Sample_Time) / (Sample_Time + rtb_Gain);
+        (* SignalConversion: '<S1>/TmpSignal ConversionAtDiscrete Transfer FcnInport2' *)
+        c_TmpSignalConversio[0] := rtb_Divide;
+        c_TmpSignalConversio[1] := rtb_Divide;
+        (* SignalConversion: '<S1>/TmpSignal ConversionAtDiscrete Transfer FcnInport3' incorporates:
+         *  Constant: '<S1>/Constant'
+         *  Gain: '<S1>/Gain1'
+         *  Product: '<S1>/Divide1'
+         *  Sum: '<S1>/Add1'
+         *  Sum: '<S1>/Minus' *)
+        d_TmpSignalConversio[0] := 1.0;
+        d_TmpSignalConversio[1] :=  -((rtb_Gain - Sample_Time) / (rtb_Gain + Sample_Time));
+        (* DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn' *)
+        rtb_Gain := FOPD_Input - (d_TmpSignalConversio[1] * DiscreteTransferFcnv);
+        rtb_Divide := (c_TmpSignalConversio[0] * rtb_Gain) + (c_TmpSignalConversio[1] * DiscreteTransferFcnv);
+        (* Delay: '<S1>/Delay' *)
+        IF Dead_Time < 1.0 THEN 
+            (* Outport: '<Root>/FOPD_Output' *)
+            FOPD_Output := rtb_Divide;
+        ELSE 
+            IF Dead_Time > 800.0 THEN 
+                b_i := 800;
+            ELSE 
+                b_i := TRUNC(Dead_Time);
+            END_IF;
+            (* Outport: '<Root>/FOPD_Output' *)
+            FOPD_Output := Delay_DSTATE[800 - b_i];
+        END_IF;
+        (* End of Delay: '<S1>/Delay' *)
+        
+        (* Update for DiscreteTransferFcn: '<S1>/Discrete Transfer Fcn' *)
+        DiscreteTransferFcnv := rtb_Gain;
+        (* Update for Delay: '<S1>/Delay' *)
+        FOR b_i := 0 TO 798 DO 
+            Delay_DSTATE[b_i] := Delay_DSTATE[b_i + 1];
+        END_FOR;
+        Delay_DSTATE[799] := rtb_Divide;
+        (* End of Update for Delay: '<S1>/Delay' *)
+END_CASE;
+END_FUNCTION_BLOCK
