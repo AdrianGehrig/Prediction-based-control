@@ -1,0 +1,768 @@
+(*
+ *
+ * File: Smith_Predictor_MIAC.scl
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "Smith_Predictor_MIAC/Smith_Predictor_MIAC"
+ *
+ * Model name                      : Smith_Predictor_MIAC
+ * Model version                   : 1.1
+ * Model creator                   : Trips
+ * Model last modified by          : Trips
+ * Model last modified on          : Tue Mar 05 17:36:27 2019
+ * Model sample time               : 0s
+ * Subsystem name                  : Smith_Predictor_MIAC/Smith_Predictor_MIAC
+ * Subsystem sample time           : 1s
+ * Simulink PLC Coder version      : 2.6 (R2018b) 24-May-2018
+ * ST code generated on            : Tue Mar 05 17:42:11 2019
+ *
+ * Target IDE selection            : Siemens SIMATIC Step 7
+ * Test Bench included             : No
+ *
+ *)
+TYPE c_c_recursiveEstimat
+    STRUCT
+        IteratorPosition: DINT;
+    END_STRUCT
+END_TYPE
+TYPE c_d_recursiveEstimat
+    STRUCT
+        OutputDataIterator: c_c_recursiveEstimat;
+        InputDataIterator: c_c_recursiveEstimat;
+    END_STRUCT
+END_TYPE
+FUNCTION_BLOCK ZCFCN_d_RISING
+VAR_INPUT
+    u0: INT;
+    u1: REAL;
+END_VAR
+VAR_OUTPUT
+    y0: DINT;
+    y1: INT;
+END_VAR
+VAR
+    rising: BOOL;
+    temp1: BOOL;
+    temp2: BOOL;
+END_VAR
+temp1 := FALSE;
+IF u1 > 0.0 THEN 
+    y1 := 1;
+ELSIF u1 < 0.0 THEN 
+    y1 := 2;
+ELSE 
+    y1 := 0;
+END_IF;
+temp2 := FALSE;
+IF u0 = 2 THEN 
+    IF y1 = 0 THEN 
+        rising := TRUE;
+    ELSIF y1 = 1 THEN 
+        rising := TRUE;
+    ELSE 
+        temp2 := TRUE;
+    END_IF;
+ELSE 
+    temp2 := TRUE;
+END_IF;
+IF temp2 THEN 
+    IF u0 = 0 THEN 
+        IF y1 = 1 THEN 
+            rising := TRUE;
+        ELSE 
+            temp1 := TRUE;
+        END_IF;
+    ELSE 
+        temp1 := TRUE;
+    END_IF;
+END_IF;
+IF temp1 THEN 
+    IF u0 = 101 THEN 
+        IF y1 = 1 THEN 
+            rising := TRUE;
+        ELSE 
+            rising := FALSE;
+        END_IF;
+    ELSE 
+        rising := FALSE;
+    END_IF;
+END_IF;
+IF rising THEN 
+    y0 := 1;
+ELSE 
+    y0 := 0;
+END_IF;
+IF (u0 = 2) AND (y1 = 0) THEN 
+    y1 := 100;
+END_IF;
+END_FUNCTION_BLOCK
+FUNCTION_BLOCK c_Smith_Predictor_MI
+VAR_INPUT
+    ssMethodType: INT;
+    Setpoint: REAL;
+    Process_Value: REAL;
+    Gain_System: REAL;
+    Time_Constant_System: REAL;
+    Dead_Time_System: DINT;
+    Enable_Auto: REAL;
+    Hand_Value: REAL;
+    P_Controller: REAL;
+    I_Controller: REAL;
+    Start_Identification: REAL;
+    c_Time_Constant_Gain: REAL;
+    Enable_Adaption: REAL;
+    Sample_Time: REAL;
+END_VAR
+VAR_OUTPUT
+    Gain_NOT_Filtered: REAL;
+    Gain_Filtered: REAL;
+    Controller_Value: REAL;
+END_VAR
+VAR
+    UnitDelay_DSTATE: REAL;
+    c_Integrator_IC_LOAD: INT;
+    Integrator_DSTATE: REAL;
+    c_Integrator_PrevRes: INT;
+    c_inputSignalLowPass: REAL;
+    d_outputSignalLowPas: REAL;
+    icLoad: INT;
+    icLoad_o: INT;
+    icLoad_g: INT;
+    icLoad_b: INT;
+    icLoad_ob: INT;
+    icLoad_k: INT;
+    In1_g: REAL;
+    In1: REAL;
+    Multiply: REAL;
+    In1_p: REAL;
+    In1_e: REAL;
+    UnitDelay_DSTATE_a: REAL;
+    c_arxEstimator_not_e: BOOL;
+    arxEstimator: c_d_recursiveEstimat;
+    DiscreteTransferFcnv: REAL;
+    b_DiscreteTransferFc: REAL;
+    d_inputSignalLowPass: INT := 3;
+    e_outputSignalLowPas: INT := 3;
+    delayTheta_Reset_ZCE: INT := 3;
+    delayL_Reset_ZCE: INT := 3;
+    delayPhi_Reset_ZCE: INT := 3;
+    c_delayBufferU_Reset: INT := 3;
+    c_delayBufferY_Reset: INT := 3;
+    c_delayBufferRegress: INT := 3;
+    Delay_Reset_ZCE: INT := 3;
+    c_System_Delay_Simul: INT := 3;
+    d_System_Delay_Simul: INT := 3;
+    c_DiscreteTransferFc: INT := 3;
+    d_DiscreteTransferFc: INT := 3;
+    e_System_Delay_Simul: ARRAY [0..799] OF REAL;
+    f_System_Delay_Simul: ARRAY [0..799] OF REAL;
+    c_TmpSignalConversio: ARRAY [0..1] OF REAL;
+    d_TmpSignalConversio: ARRAY [0..1] OF REAL;
+    e_TmpSignalConversio: ARRAY [0..1] OF REAL;
+    f_TmpSignalConversio: ARRAY [0..1] OF REAL;
+    delayL_DSTATE: ARRAY [0..8] OF REAL;
+    delayTheta_DSTATE: ARRAY [0..2] OF REAL;
+    delayPhi_DSTATE: ARRAY [0..3] OF REAL;
+    c_InitialCovariancev: ARRAY [0..8] OF REAL := [3.1622776601683795,0.0,0.0,0.0,3.1622776601683795,0.0,0.0,0.0,
+        3.1622776601683795];
+    i0_ZCFCN_d_RISING: ZCFCN_d_RISING;
+    phi: ARRAY [0..2] OF REAL;
+    fTr: ARRAY [0..2] OF REAL;
+    a1: REAL;
+    sqrtA0overA1: REAL;
+    sqrtA0timesA1: REAL;
+    b_kk: DINT;
+    c_rtb_DiscreteTransf: REAL;
+    rtb_UnitDelay: REAL;
+    rtb_inputdelayed: REAL;
+    rtb_theta: ARRAY [0..2] OF REAL;
+    rtb_AzSumofElements: REAL;
+    rtb_L: ARRAY [0..8] OF REAL;
+    rtb_phiMemory: ARRAY [0..3] OF REAL;
+    input: REAL;
+    c_outputSignalLowPas: REAL;
+END_VAR
+CASE ssMethodType OF
+    0: 
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay' *)
+        UnitDelay_DSTATE := 0.0;
+        (* SystemInitialize for Atomic SubSystem: '<S1>/System Identification' *)
+        (* InitializeConditions for DiscreteTransferFcn: '<S3>/input Signal Low Pass Filter' *)
+        c_inputSignalLowPass := 0.0;
+        (* InitializeConditions for DiscreteTransferFcn: '<S3>/output Signal Low Pass Filter1' *)
+        d_outputSignalLowPas := 0.0;
+        (* InitializeConditions for Delay: '<S108>/delayTheta' *)
+        icLoad := 1;
+        (* InitializeConditions for Delay: '<S108>/delayL' *)
+        icLoad_o := 1;
+        (* InitializeConditions for Delay: '<S108>/delayPhi' *)
+        icLoad_g := 1;
+        (* InitializeConditions for Delay: '<S108>/delayBufferU' *)
+        icLoad_b := 1;
+        (* InitializeConditions for Delay: '<S108>/delayBufferY' *)
+        icLoad_ob := 1;
+        (* InitializeConditions for Delay: '<S128>/delayBufferRegressors' *)
+        icLoad_k := 1;
+        (* SystemInitialize for MATLAB Function: '<S128>/rarx' *)
+        c_arxEstimator_not_e := FALSE;
+        (* SystemInitialize for Enabled SubSystem: '<S3>/Get_Current_Output_Offset' *)
+        (* SystemInitialize for Outport: '<S105>/Hold when disabled' *)
+        In1_g := 0.0;
+        (* End of SystemInitialize for SubSystem: '<S3>/Get_Current_Output_Offset' *)
+        
+        (* SystemInitialize for Enabled SubSystem: '<S3>/Get_Current_delayed_Input_Offset' *)
+        (* SystemInitialize for Outport: '<S106>/Hold when disabled' *)
+        In1 := 0.0;
+        (* End of SystemInitialize for SubSystem: '<S3>/Get_Current_delayed_Input_Offset' *)
+        
+        (* SystemInitialize for Atomic SubSystem: '<S3>/PT1_Tustin' *)
+        (* InitializeConditions for DiscreteTransferFcn: '<S107>/Discrete Transfer Fcn' *)
+        DiscreteTransferFcnv := 0.0;
+        (* End of SystemInitialize for SubSystem: '<S3>/PT1_Tustin' *)
+        (* End of SystemInitialize for SubSystem: '<S1>/System Identification' *)
+        
+        (* SystemInitialize for Atomic SubSystem: '<S1>/Adaptive SmithPredictor1' *)
+        (* InitializeConditions for UnitDelay: '<S2>/Unit Delay' *)
+        UnitDelay_DSTATE_a := 0.0;
+        (* InitializeConditions for DiscreteIntegrator: '<S62>/Integrator' *)
+        c_Integrator_IC_LOAD := 1;
+        c_Integrator_PrevRes := 2;
+        (* End of SystemInitialize for SubSystem: '<S1>/Adaptive SmithPredictor1' *)
+        (* SystemInitialize for Atomic SubSystem: '<S1>/Adaptive SmithPredictor1' *)
+        (* SystemInitialize for Atomic SubSystem: '<S1>/System Identification' *)
+        FOR b_kk := 0 TO 799 DO 
+            (* InitializeConditions for Delay: '<S3>/System_Delay_Simulation' *)
+            e_System_Delay_Simul[b_kk] := 0.0;
+            (* InitializeConditions for Delay: '<S2>/System_Delay_Simulation' *)
+            f_System_Delay_Simul[b_kk] := 0.0;
+        END_FOR;
+        (* End of SystemInitialize for SubSystem: '<S1>/System Identification' *)
+        
+        (* SystemInitialize for Enabled SubSystem: '<S2>/Get_Current_Offset1' *)
+        (* SystemInitialize for Outport: '<S5>/Hold when disabled' *)
+        In1_p := 0.0;
+        (* End of SystemInitialize for SubSystem: '<S2>/Get_Current_Offset1' *)
+        
+        (* SystemInitialize for Enabled SubSystem: '<S2>/Get_Current_Offset' *)
+        (* SystemInitialize for Outport: '<S4>/Hold when disabled' *)
+        In1_e := 0.0;
+        (* End of SystemInitialize for SubSystem: '<S2>/Get_Current_Offset' *)
+        
+        (* SystemInitialize for Atomic SubSystem: '<S2>/PT1_Tustin' *)
+        (* InitializeConditions for DiscreteTransferFcn: '<S7>/Discrete Transfer Fcn' *)
+        b_DiscreteTransferFc := 0.0;
+        (* End of SystemInitialize for SubSystem: '<S2>/PT1_Tustin' *)
+        (* End of SystemInitialize for SubSystem: '<S1>/Adaptive SmithPredictor1' *)
+    1: 
+        (* UnitDelay: '<S1>/Unit Delay' *)
+        rtb_UnitDelay := UnitDelay_DSTATE;
+        (* Outputs for Atomic SubSystem: '<S1>/System Identification' *)
+        (* DiscreteTransferFcn: '<S3>/input Signal Low Pass Filter' *)
+        i0_ZCFCN_d_RISING(u0 := d_inputSignalLowPass, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        d_inputSignalLowPass := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            c_inputSignalLowPass := 0.0;
+        END_IF;
+        input := 0.01 * c_inputSignalLowPass;
+        (* End of DiscreteTransferFcn: '<S3>/input Signal Low Pass Filter' *)
+        
+        (* DiscreteTransferFcn: '<S3>/output Signal Low Pass Filter1' *)
+        i0_ZCFCN_d_RISING(u0 := e_outputSignalLowPas, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        e_outputSignalLowPas := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            d_outputSignalLowPas := 0.0;
+        END_IF;
+        rtb_inputdelayed := 0.01 * d_outputSignalLowPas;
+        c_outputSignalLowPas := rtb_inputdelayed;
+        (* Delay: '<S108>/delayTheta' *)
+        i0_ZCFCN_d_RISING(u0 := delayTheta_Reset_ZCE, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        delayTheta_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad := 1;
+        END_IF;
+        IF icLoad <> 0 THEN 
+            delayTheta_DSTATE[0] := 2.2204460492503131E-16;
+            delayTheta_DSTATE[1] := 2.2204460492503131E-16;
+            delayTheta_DSTATE[2] := 2.2204460492503131E-16;
+        END_IF;
+        (* Delay: '<S108>/delayL' incorporates:
+         *  Constant: '<S108>/InitialCovariance' *)
+        i0_ZCFCN_d_RISING(u0 := delayL_Reset_ZCE, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        delayL_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_o := 1;
+        END_IF;
+        IF icLoad_o <> 0 THEN 
+            FOR b_kk := 0 TO 8 DO 
+                delayL_DSTATE[b_kk] := c_InitialCovariancev[b_kk];
+            END_FOR;
+        END_IF;
+        (* Delay: '<S108>/delayPhi' *)
+        i0_ZCFCN_d_RISING(u0 := delayPhi_Reset_ZCE, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        delayPhi_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_g := 1;
+        END_IF;
+        IF icLoad_g <> 0 THEN 
+            delayPhi_DSTATE[0] := 0.0;
+            delayPhi_DSTATE[1] := 0.0;
+            delayPhi_DSTATE[2] := 0.0;
+            delayPhi_DSTATE[3] := 0.0;
+        END_IF;
+        (* Delay: '<S108>/delayBufferU' *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferU_Reset, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferU_Reset := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_b := 1;
+        END_IF;
+        (* End of Delay: '<S108>/delayBufferU' *)
+        
+        (* Delay: '<S108>/delayBufferY' *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferY_Reset, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferY_Reset := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_ob := 1;
+        END_IF;
+        (* End of Delay: '<S108>/delayBufferY' *)
+        
+        (* Delay: '<S128>/delayBufferRegressors' *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferRegress, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferRegress := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_k := 1;
+        END_IF;
+        (* End of Delay: '<S128>/delayBufferRegressors' *)
+        
+        (* Delay: '<S130>/Delay' *)
+        i0_ZCFCN_d_RISING(u0 := Delay_Reset_ZCE, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        Delay_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        (* MATLAB Function: '<S128>/rarx' *)
+        (* % Was a reset trigered? *)
+        (* MATLAB Function 'Recursive Estimation/rarx/rarx': '<S137>:1' *)
+        (* Copyright 2015-2018 The MathWorks, Inc. *)
+        (* Get the estimator object. Use the arx estimator with nb=0 *)
+        (* '<S137>:1:17' if isempty(arxEstimator) *)
+        IF  NOT c_arxEstimator_not_e THEN 
+            (* '<S137>:1:18' arxEstimator = recursiveEstimation.internal.rpoly.getEstimator(... *)
+            (* '<S137>:1:19'         'arx',... *)
+            (* '<S137>:1:20'         algorithmParams); *)
+            c_arxEstimator_not_e := TRUE;
+        END_IF;
+        (* If user triggered a reset, communicate this to the estimator *)
+        (* '<S137>:1:24' if hasTriggeredReset *)
+        (* Update algorithm states, perform estimation *)
+        (* % States *)
+        (* % new IO data *)
+        (* '<S137>:1:31' [phiMemory, uMemory, yMemory, regressorsMemory, ... *)
+        (* '<S137>:1:32'     theta, L, ... *)
+        (* '<S137>:1:33'     A, B, e] = ... *)
+        (* '<S137>:1:34'     arxEstimator.estimate(... *)
+        (* '<S137>:1:35'     phiMemory, uMemory, yMemory, regressorsMemory, theta, L, ... % States *)
+        (* '<S137>:1:36'     yMeas, uMeas,... % new IO data *)
+        (* '<S137>:1:37'     isEnabled, adg1, adg2, algorithmParams); *)
+        arxEstimator.OutputDataIterator.IteratorPosition := 1;
+        arxEstimator.InputDataIterator.IteratorPosition := 1;
+        arxEstimator.OutputDataIterator.IteratorPosition := MIN(IN1:=arxEstimator.OutputDataIterator.IteratorPosition + 1, 
+            IN2:=2);
+        arxEstimator.InputDataIterator.IteratorPosition := MIN(IN1:=arxEstimator.InputDataIterator.IteratorPosition + 1, 
+            IN2:=2);
+        (* End of Outputs for SubSystem: '<S1>/System Identification' *)
+        (* Outputs for Atomic SubSystem: '<S1>/System Identification' *)
+        (* MATLAB Function: '<S128>/rarx' incorporates:
+         *  DataTypeConversion: '<S108>/DataTypeConversionEnable'
+         *  Delay: '<S108>/delayL'
+         *  Delay: '<S108>/delayPhi'
+         *  Delay: '<S108>/delayTheta'
+         *  DiscreteTransferFcn: '<S3>/output Signal Low Pass Filter1' *)
+        FOR b_kk := 0 TO 8 DO 
+            rtb_L[b_kk] := delayL_DSTATE[b_kk];
+        END_FOR;
+        rtb_theta[0] := delayTheta_DSTATE[0];
+        rtb_theta[1] := delayTheta_DSTATE[1];
+        rtb_theta[2] := delayTheta_DSTATE[2];
+        rtb_inputdelayed := rtb_inputdelayed - (((delayPhi_DSTATE[0] * delayTheta_DSTATE[0]) + (delayPhi_DSTATE[1] * delayTheta_DSTATE[1])
+            ) + (delayPhi_DSTATE[3] * delayTheta_DSTATE[2]));
+        IF Start_Identification <> 0.0 THEN 
+            FOR b_kk := 0 TO 2 DO 
+                fTr[b_kk] := (delayL_DSTATE[(3 * b_kk) + 2] * delayPhi_DSTATE[3]) + ((delayL_DSTATE[(3 * b_kk) + 1] * delayPhi_DSTATE[1])
+                     + (delayL_DSTATE[3 * b_kk] * delayPhi_DSTATE[0]));
+            END_FOR;
+            phi[0] := 0.0;
+            rtb_theta[0] := 0.0;
+            phi[1] := 0.0;
+            rtb_theta[1] := 0.0;
+            a1 := (fTr[2] * fTr[2]) + 1.0;
+            sqrtA0overA1 := SQRT(1.0 / a1);
+            rtb_theta[2] := rtb_L[8] * fTr[2];
+            rtb_L[8] := (rtb_L[8] * sqrtA0overA1) - (0.0 / (sqrtA0overA1 * a1));
+            phi[2] := rtb_theta[2];
+            sqrtA0overA1 := a1;
+            a1 := (fTr[1] * fTr[1]) + a1;
+            sqrtA0overA1 := SQRT(sqrtA0overA1 / a1);
+            sqrtA0timesA1 := sqrtA0overA1 * a1;
+            FOR b_kk := 0 TO 1 DO 
+                rtb_AzSumofElements := rtb_L[5 - b_kk];
+                c_rtb_DiscreteTransf := phi[2 - b_kk];
+                rtb_theta[2 - b_kk] := (rtb_AzSumofElements * fTr[1]) + c_rtb_DiscreteTransf;
+                rtb_L[5 - b_kk] := (rtb_AzSumofElements * sqrtA0overA1) - ((c_rtb_DiscreteTransf * fTr[1]) / sqrtA0timesA1)
+                    ;
+                phi[2 - b_kk] := rtb_theta[2 - b_kk];
+            END_FOR;
+            sqrtA0overA1 := a1;
+            a1 := (fTr[0] * fTr[0]) + a1;
+            sqrtA0overA1 := SQRT(sqrtA0overA1 / a1);
+            sqrtA0timesA1 := sqrtA0overA1 * a1;
+            FOR b_kk := 0 TO 2 DO 
+                rtb_AzSumofElements := rtb_L[2 - b_kk];
+                c_rtb_DiscreteTransf := phi[2 - b_kk];
+                rtb_theta[2 - b_kk] := (rtb_AzSumofElements * fTr[0]) + c_rtb_DiscreteTransf;
+                rtb_L[2 - b_kk] := (rtb_AzSumofElements * sqrtA0overA1) - ((c_rtb_DiscreteTransf * fTr[0]) / sqrtA0timesA1)
+                    ;
+                phi[2 - b_kk] := rtb_theta[2 - b_kk];
+            END_FOR;
+            rtb_theta[0] := rtb_theta[0] / a1;
+            rtb_theta[1] := rtb_theta[1] / a1;
+            rtb_theta[0] := (rtb_theta[0] * rtb_inputdelayed) + delayTheta_DSTATE[0];
+            rtb_theta[1] := (rtb_theta[1] * rtb_inputdelayed) + delayTheta_DSTATE[1];
+            rtb_theta[2] := ((rtb_theta[2] / a1) * rtb_inputdelayed) + delayTheta_DSTATE[2];
+        END_IF;
+        rtb_phiMemory[2] := delayPhi_DSTATE[1];
+        rtb_phiMemory[1] := delayPhi_DSTATE[0];
+        (* Outputs for Atomic SubSystem: '<S3>/Calculate DC Gain1' *)
+        (* Product: '<S104>/Divide' incorporates:
+         *  MATLAB Function: '<S128>/rarx'
+         *  Sum: '<S104>/A(z) Sum of Elements' *)
+        (* helper variables *)
+        sqrtA0timesA1 := rtb_theta[2] / ((1.0 + rtb_theta[0]) + rtb_theta[1]);
+        (* Saturate: '<S104>/Gain_Saturation' *)
+        IF sqrtA0timesA1 >= 1.5 THEN 
+            Gain_NOT_Filtered := 1.5;
+        ELSIF sqrtA0timesA1 > 0.01 THEN 
+            Gain_NOT_Filtered := sqrtA0timesA1;
+        ELSE 
+            Gain_NOT_Filtered := 0.01;
+        END_IF;
+        (* End of Saturate: '<S104>/Gain_Saturation' *)
+        (* End of Outputs for SubSystem: '<S3>/Calculate DC Gain1' *)
+        
+        (* Outputs for Enabled SubSystem: '<S3>/Get_Current_Output_Offset' incorporates:
+         *  EnablePort: '<S105>/Enable' *)
+        (* Logic: '<S3>/NOT' incorporates:
+         *  Inport: '<S105>/In1' *)
+        IF Start_Identification = 0.0 THEN 
+            In1_g := Process_Value;
+        END_IF;
+        (* End of Logic: '<S3>/NOT' *)
+        (* End of Outputs for SubSystem: '<S3>/Get_Current_Output_Offset' *)
+        
+        (* Delay: '<S3>/System_Delay_Simulation' incorporates:
+         *  Constant: '<S3>/Vorsicht wenn resettet wird muss erst dieser Totzeitspeicher  voll gelaufen sein bevor die Adaption starten darf  Sonst kommt heir immer 0 raus und die Identifikation kann nicht rechnen' *)
+        i0_ZCFCN_d_RISING(u0 := c_System_Delay_Simul, u1 := 0.0);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_System_Delay_Simul := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            FOR b_kk := 0 TO 799 DO 
+                e_System_Delay_Simul[b_kk] := 0.0;
+            END_FOR;
+        END_IF;
+        IF Dead_Time_System <= 0 THEN 
+            rtb_inputdelayed := rtb_UnitDelay;
+        ELSE 
+            IF Dead_Time_System > 800 THEN 
+                b_kk := 800;
+            ELSE 
+                b_kk := Dead_Time_System;
+            END_IF;
+            rtb_inputdelayed := e_System_Delay_Simul[800 - b_kk];
+        END_IF;
+        (* End of Delay: '<S3>/System_Delay_Simulation' *)
+        
+        (* Outputs for Enabled SubSystem: '<S3>/Get_Current_delayed_Input_Offset' incorporates:
+         *  EnablePort: '<S106>/Enable' *)
+        (* Logic: '<S3>/NOT1' incorporates:
+         *  Inport: '<S106>/In1' *)
+        IF Start_Identification = 0.0 THEN 
+            In1 := rtb_inputdelayed;
+        END_IF;
+        (* End of Logic: '<S3>/NOT1' *)
+        (* End of Outputs for SubSystem: '<S3>/Get_Current_delayed_Input_Offset' *)
+        
+        (* Outputs for Atomic SubSystem: '<S3>/PT1_Tustin' *)
+        (* Gain: '<S107>/Gain' *)
+        rtb_AzSumofElements := 2.0 * c_Time_Constant_Gain;
+        (* Product: '<S107>/Multiply' incorporates:
+         *  Constant: '<S3>/Constant' *)
+        Multiply := 1.0;
+        (* Product: '<S107>/Divide' incorporates:
+         *  Constant: '<S3>/Constant'
+         *  Sum: '<S107>/Add' *)
+        sqrtA0timesA1 := Multiply / (1.0 + rtb_AzSumofElements);
+        (* SignalConversion: '<S107>/TmpSignal ConversionAtDiscrete Transfer FcnInport2' *)
+        c_TmpSignalConversio[0] := sqrtA0timesA1;
+        c_TmpSignalConversio[1] := sqrtA0timesA1;
+        (* SignalConversion: '<S107>/TmpSignal ConversionAtDiscrete Transfer FcnInport3' incorporates:
+         *  Constant: '<S107>/Constant'
+         *  Constant: '<S3>/Constant'
+         *  Gain: '<S107>/Gain1'
+         *  Product: '<S107>/Divide1'
+         *  Sum: '<S107>/Add1'
+         *  Sum: '<S107>/Minus' *)
+        d_TmpSignalConversio[0] := 1.0;
+        d_TmpSignalConversio[1] :=  -((rtb_AzSumofElements - 1.0) / (rtb_AzSumofElements + 1.0));
+        (* DiscreteTransferFcn: '<S107>/Discrete Transfer Fcn' *)
+        i0_ZCFCN_d_RISING(u0 := c_DiscreteTransferFc, u1 := Start_Identification);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_DiscreteTransferFc := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            DiscreteTransferFcnv := 0.0;
+        END_IF;
+        sqrtA0timesA1 := Gain_NOT_Filtered - (d_TmpSignalConversio[1] * DiscreteTransferFcnv);
+        c_rtb_DiscreteTransf := (c_TmpSignalConversio[0] * sqrtA0timesA1) + (c_TmpSignalConversio[1] * DiscreteTransferFcnv)
+            ;
+        (* End of DiscreteTransferFcn: '<S107>/Discrete Transfer Fcn' *)
+        
+        (* Update for DiscreteTransferFcn: '<S107>/Discrete Transfer Fcn' *)
+        DiscreteTransferFcnv := sqrtA0timesA1;
+        (* End of Outputs for SubSystem: '<S3>/PT1_Tustin' *)
+        
+        (* Update for DiscreteTransferFcn: '<S3>/input Signal Low Pass Filter' incorporates:
+         *  Sum: '<S3>/Substract Current Offset  so that the linearised model works1' *)
+        c_inputSignalLowPass := (rtb_inputdelayed - In1) - (-0.99 * c_inputSignalLowPass);
+        (* Update for DiscreteTransferFcn: '<S3>/output Signal Low Pass Filter1' incorporates:
+         *  Sum: '<S3>/Substract Current Offset  so that the linearised model works' *)
+        d_outputSignalLowPas := (Process_Value - In1_g) - (-0.99 * d_outputSignalLowPas);
+        (* Update for Delay: '<S108>/delayTheta' *)
+        icLoad := 0;
+        delayTheta_DSTATE[0] := rtb_theta[0];
+        delayTheta_DSTATE[1] := rtb_theta[1];
+        delayTheta_DSTATE[2] := rtb_theta[2];
+        (* Update for Delay: '<S108>/delayL' *)
+        icLoad_o := 0;
+        (* End of Outputs for SubSystem: '<S1>/System Identification' *)
+        (* Outputs for Atomic SubSystem: '<S1>/System Identification' *)
+        (* Update for Delay: '<S108>/delayL' *)
+        FOR b_kk := 0 TO 8 DO 
+            delayL_DSTATE[b_kk] := rtb_L[b_kk];
+        END_FOR;
+        (* Update for Delay: '<S108>/delayPhi' incorporates:
+         *  MATLAB Function: '<S128>/rarx' *)
+        icLoad_g := 0;
+        delayPhi_DSTATE[0] :=  -c_outputSignalLowPas;
+        delayPhi_DSTATE[1] := rtb_phiMemory[1];
+        delayPhi_DSTATE[2] := rtb_phiMemory[2];
+        delayPhi_DSTATE[3] := input;
+        (* Update for Delay: '<S108>/delayBufferU' *)
+        icLoad_b := 0;
+        (* Update for Delay: '<S108>/delayBufferY' *)
+        icLoad_ob := 0;
+        (* Update for Delay: '<S128>/delayBufferRegressors' *)
+        icLoad_k := 0;
+        (* Update for Delay: '<S3>/System_Delay_Simulation' *)
+        FOR b_kk := 0 TO 798 DO 
+            e_System_Delay_Simul[b_kk] := e_System_Delay_Simul[b_kk + 1];
+        END_FOR;
+        e_System_Delay_Simul[799] := rtb_UnitDelay;
+        (* End of Update for Delay: '<S3>/System_Delay_Simulation' *)
+        (* End of Outputs for SubSystem: '<S1>/System Identification' *)
+        
+        (* Outport: '<Root>/Gain_Filtered' *)
+        Gain_Filtered := c_rtb_DiscreteTransf;
+        (* Outputs for Atomic SubSystem: '<S1>/Adaptive SmithPredictor1' *)
+        (* Switch: '<S2>/Check if Controller  Integrator is 0' incorporates:
+         *  Constant: '<S2>/Constant'
+         *  Constant: '<S2>/Constant6'
+         *  Product: '<S2>/Invert Integrator' *)
+        IF I_Controller <> 0.0 THEN 
+            sqrtA0timesA1 := 1.0 / I_Controller;
+        ELSE 
+            sqrtA0timesA1 := 0.0;
+        END_IF;
+        (* End of Switch: '<S2>/Check if Controller  Integrator is 0' *)
+        
+        (* Product: '<S2>/Divide' *)
+        rtb_inputdelayed := Hand_Value / P_Controller;
+        (* Switch: '<S2>/Hand_Mode2' incorporates:
+         *  Constant: '<S2>/Constant2' *)
+        IF Enable_Auto > 0.0 THEN 
+            rtb_AzSumofElements := Setpoint;
+        ELSE 
+            rtb_AzSumofElements := 0.0;
+        END_IF;
+        (* End of Switch: '<S2>/Hand_Mode2' *)
+        
+        (* Outputs for Enabled SubSystem: '<S2>/Get_Current_Offset1' incorporates:
+         *  EnablePort: '<S5>/Enable' *)
+        (* Logic: '<S2>/NOT1' incorporates:
+         *  Inport: '<S5>/In1' *)
+        IF Enable_Auto = 0.0 THEN 
+            In1_p := Process_Value;
+        END_IF;
+        (* End of Logic: '<S2>/NOT1' *)
+        (* End of Outputs for SubSystem: '<S2>/Get_Current_Offset1' *)
+        
+        (* Switch: '<S2>/Hand_Mode4' incorporates:
+         *  Constant: '<S2>/Constant5' *)
+        IF Enable_Auto > 0.0 THEN 
+            rtb_UnitDelay := In1_p;
+        ELSE 
+            rtb_UnitDelay := 0.0;
+        END_IF;
+        (* End of Switch: '<S2>/Hand_Mode4' *)
+        
+        (* Sum: '<S2>/Sum' incorporates:
+         *  Sum: '<S2>/Substract Current Setpoint Offset'
+         *  UnitDelay: '<S2>/Unit Delay' *)
+        rtb_AzSumofElements := (rtb_AzSumofElements - rtb_UnitDelay) - UnitDelay_DSTATE_a;
+        (* DiscreteIntegrator: '<S62>/Integrator' *)
+        IF c_Integrator_IC_LOAD <> 0 THEN 
+            Integrator_DSTATE := rtb_inputdelayed;
+        END_IF;
+        IF (Enable_Auto > 0.0) AND (c_Integrator_PrevRes <= 0) THEN 
+            Integrator_DSTATE := rtb_inputdelayed;
+        END_IF;
+        (* Product: '<S53>/PProd Out' incorporates:
+         *  DiscreteIntegrator: '<S62>/Integrator'
+         *  Sum: '<S91>/Sum' *)
+        sqrtA0overA1 := (rtb_AzSumofElements + Integrator_DSTATE) * P_Controller;
+        (* Saturate: '<S83>/Saturation' *)
+        IF sqrtA0overA1 >= 100.0 THEN 
+            sqrtA0overA1 := 100.0;
+        ELSIF sqrtA0overA1 <= 0.0 THEN 
+            sqrtA0overA1 := 0.0;
+        END_IF;
+        (* End of Saturate: '<S83>/Saturation' *)
+        
+        (* Switch: '<S2>/Hand_Mode' *)
+        IF Enable_Auto > 0.0 THEN 
+            Controller_Value := sqrtA0overA1;
+        ELSE 
+            Controller_Value := Hand_Value;
+        END_IF;
+        (* End of Switch: '<S2>/Hand_Mode' *)
+        
+        (* Outputs for Enabled SubSystem: '<S2>/Get_Current_Offset' incorporates:
+         *  EnablePort: '<S4>/Enable' *)
+        (* Logic: '<S2>/NOT' incorporates:
+         *  Inport: '<S4>/In1' *)
+        IF Enable_Auto = 0.0 THEN 
+            In1_e := Controller_Value;
+        END_IF;
+        (* End of Logic: '<S2>/NOT' *)
+        (* End of Outputs for SubSystem: '<S2>/Get_Current_Offset' *)
+        
+        (* Switch: '<S2>/Hand_Mode1' incorporates:
+         *  Constant: '<S2>/Constant3'
+         *  Constant: '<S2>/Constant4'
+         *  Sum: '<S2>/Substract Current Offset  so that the linearised model works'
+         *  Switch: '<S2>/Hand_Mode3' *)
+        IF Enable_Auto > 0.0 THEN 
+            sqrtA0overA1 := Controller_Value - In1_e;
+            rtb_inputdelayed := Process_Value;
+        ELSE 
+            sqrtA0overA1 := 0.0;
+            rtb_inputdelayed := 0.0;
+        END_IF;
+        (* End of Switch: '<S2>/Hand_Mode1' *)
+        
+        (* Switch: '<S2>/Switch_from_initial_Gain_to_Estimated' *)
+        IF Enable_Adaption <= 0.0 THEN 
+            c_rtb_DiscreteTransf := Gain_System;
+        END_IF;
+        (* End of Switch: '<S2>/Switch_from_initial_Gain_to_Estimated' *)
+        
+        (* Product: '<S2>/Mul_Gain_or_Estimate' *)
+        a1 := sqrtA0overA1 * c_rtb_DiscreteTransf;
+        (* Outputs for Atomic SubSystem: '<S2>/PT1_Tustin' *)
+        (* Gain: '<S7>/Gain' *)
+        c_rtb_DiscreteTransf := 2.0 * Time_Constant_System;
+        (* Product: '<S7>/Divide' incorporates:
+         *  Product: '<S7>/Multiply'
+         *  Sum: '<S7>/Add' *)
+        sqrtA0overA1 := Sample_Time / (Sample_Time + c_rtb_DiscreteTransf);
+        (* SignalConversion: '<S7>/TmpSignal ConversionAtDiscrete Transfer FcnInport2' *)
+        e_TmpSignalConversio[0] := sqrtA0overA1;
+        e_TmpSignalConversio[1] := sqrtA0overA1;
+        (* SignalConversion: '<S7>/TmpSignal ConversionAtDiscrete Transfer FcnInport3' incorporates:
+         *  Constant: '<S7>/Constant'
+         *  Gain: '<S7>/Gain1'
+         *  Product: '<S7>/Divide1'
+         *  Sum: '<S7>/Add1'
+         *  Sum: '<S7>/Minus' *)
+        f_TmpSignalConversio[0] := 1.0;
+        f_TmpSignalConversio[1] :=  -((c_rtb_DiscreteTransf - Sample_Time) / (c_rtb_DiscreteTransf + Sample_Time));
+        (* DiscreteTransferFcn: '<S7>/Discrete Transfer Fcn' *)
+        i0_ZCFCN_d_RISING(u0 := d_DiscreteTransferFc, u1 := Enable_Auto);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        d_DiscreteTransferFc := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            b_DiscreteTransferFc := 0.0;
+        END_IF;
+        c_rtb_DiscreteTransf := a1 - (f_TmpSignalConversio[1] * b_DiscreteTransferFc);
+        a1 := (e_TmpSignalConversio[0] * c_rtb_DiscreteTransf) + (e_TmpSignalConversio[1] * b_DiscreteTransferFc);
+        (* End of DiscreteTransferFcn: '<S7>/Discrete Transfer Fcn' *)
+        
+        (* Update for DiscreteTransferFcn: '<S7>/Discrete Transfer Fcn' *)
+        b_DiscreteTransferFc := c_rtb_DiscreteTransf;
+        (* End of Outputs for SubSystem: '<S2>/PT1_Tustin' *)
+        
+        (* Delay: '<S2>/System_Delay_Simulation' *)
+        i0_ZCFCN_d_RISING(u0 := d_System_Delay_Simul, u1 := Enable_Auto);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        d_System_Delay_Simul := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            FOR b_kk := 0 TO 799 DO 
+                f_System_Delay_Simul[b_kk] := 0.0;
+            END_FOR;
+        END_IF;
+        IF Dead_Time_System <= 0 THEN 
+            c_rtb_DiscreteTransf := a1;
+        ELSE 
+            IF Dead_Time_System > 800 THEN 
+                b_kk := 800;
+            ELSE 
+                b_kk := Dead_Time_System;
+            END_IF;
+            c_rtb_DiscreteTransf := f_System_Delay_Simul[800 - b_kk];
+        END_IF;
+        (* End of Delay: '<S2>/System_Delay_Simulation' *)
+        
+        (* Update for UnitDelay: '<S2>/Unit Delay' incorporates:
+         *  Sum: '<S2>/Substract Current Offset  so that the linearised model works1'
+         *  Sum: '<S2>/Sum17'
+         *  Sum: '<S2>/Sum18' *)
+        UnitDelay_DSTATE_a := ((rtb_inputdelayed - rtb_UnitDelay) - c_rtb_DiscreteTransf) + a1;
+        (* Update for DiscreteIntegrator: '<S62>/Integrator' incorporates:
+         *  Product: '<S51>/IProd Out' *)
+        c_Integrator_IC_LOAD := 0;
+        Integrator_DSTATE := (rtb_AzSumofElements * sqrtA0timesA1) + Integrator_DSTATE;
+        IF Enable_Auto > 0.0 THEN 
+            c_Integrator_PrevRes := 1;
+        ELSIF Enable_Auto < 0.0 THEN 
+            c_Integrator_PrevRes := -1;
+        ELSIF Enable_Auto = 0.0 THEN 
+            c_Integrator_PrevRes := 0;
+        ELSE 
+            c_Integrator_PrevRes := 2;
+        END_IF;
+        (* End of Update for DiscreteIntegrator: '<S62>/Integrator' *)
+        
+        (* Update for Delay: '<S2>/System_Delay_Simulation' *)
+        FOR b_kk := 0 TO 798 DO 
+            f_System_Delay_Simul[b_kk] := f_System_Delay_Simul[b_kk + 1];
+        END_FOR;
+        f_System_Delay_Simul[799] := a1;
+        (* End of Update for Delay: '<S2>/System_Delay_Simulation' *)
+        (* End of Outputs for SubSystem: '<S1>/Adaptive SmithPredictor1' *)
+        
+        (* Update for UnitDelay: '<S1>/Unit Delay' *)
+        UnitDelay_DSTATE := Controller_Value;
+END_CASE;
+END_FUNCTION_BLOCK
