@@ -1,0 +1,334 @@
+(*
+ *
+ * File: bug_report.scl
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "bug_report/PLC Code Generation working with Siemens when no External Initial Estimate "
+ *
+ * Model name                      : bug_report
+ * Model version                   : 1.3
+ * Model creator                   : Trips
+ * Model last modified by          : Trips
+ * Model last modified on          : Fri Mar 01 16:06:43 2019
+ * Model sample time               : 1s
+ * Subsystem name                  : bug_report/PLC Code Generation working with Siemens when no External Initial Estimate 
+ * Subsystem sample time           : 1s
+ * Simulink PLC Coder version      : 2.6 (R2018b) 24-May-2018
+ * ST code generated on            : Fri Mar 15 23:12:35 2019
+ *
+ * Target IDE selection            : Siemens SIMATIC Step 7
+ * Test Bench included             : No
+ *
+ *)
+TYPE c_c_recursiveEstimat
+    STRUCT
+        IteratorPosition: DINT;
+    END_STRUCT
+END_TYPE
+TYPE c_d_recursiveEstimat
+    STRUCT
+        OutputDataIterator: c_c_recursiveEstimat;
+        InputDataIterator: c_c_recursiveEstimat;
+    END_STRUCT
+END_TYPE
+FUNCTION_BLOCK ZCFCN_d_RISING
+VAR_INPUT
+    u0: INT;
+    u1: REAL;
+END_VAR
+VAR_OUTPUT
+    y0: DINT;
+    y1: INT;
+END_VAR
+VAR
+    rising: BOOL;
+    temp1: BOOL;
+    temp2: BOOL;
+END_VAR
+temp1 := FALSE;
+IF u1 > 0.0 THEN 
+    y1 := 1;
+ELSIF u1 < 0.0 THEN 
+    y1 := 2;
+ELSE 
+    y1 := 0;
+END_IF;
+temp2 := FALSE;
+IF u0 = 2 THEN 
+    IF y1 = 0 THEN 
+        rising := TRUE;
+    ELSIF y1 = 1 THEN 
+        rising := TRUE;
+    ELSE 
+        temp2 := TRUE;
+    END_IF;
+ELSE 
+    temp2 := TRUE;
+END_IF;
+IF temp2 THEN 
+    IF u0 = 0 THEN 
+        IF y1 = 1 THEN 
+            rising := TRUE;
+        ELSE 
+            temp1 := TRUE;
+        END_IF;
+    ELSE 
+        temp1 := TRUE;
+    END_IF;
+END_IF;
+IF temp1 THEN 
+    IF u0 = 101 THEN 
+        IF y1 = 1 THEN 
+            rising := TRUE;
+        ELSE 
+            rising := FALSE;
+        END_IF;
+    ELSE 
+        rising := FALSE;
+    END_IF;
+END_IF;
+IF rising THEN 
+    y0 := 1;
+ELSE 
+    y0 := 0;
+END_IF;
+IF (u0 = 2) AND (y1 = 0) THEN 
+    y1 := 100;
+END_IF;
+END_FUNCTION_BLOCK
+FUNCTION_BLOCK PLC
+VAR_INPUT
+    ssMethodType: INT;
+    Start_Identification: REAL;
+    System_Input: REAL;
+    System_Output: REAL;
+    Reset: REAL;
+END_VAR
+VAR_OUTPUT
+    Gain_Not_Filtered: REAL;
+END_VAR
+VAR
+    icLoad: INT;
+    icLoad_d: INT;
+    icLoad_j: INT;
+    icLoad_n: INT;
+    icLoad_h: INT;
+    icLoad_dq: INT;
+    c_arxEstimator_not_e: BOOL;
+    arxEstimator: c_d_recursiveEstimat;
+    delayTheta_Reset_ZCE: INT := 3;
+    delayL_Reset_ZCE: INT := 3;
+    delayPhi_Reset_ZCE: INT := 3;
+    c_delayBufferU_Reset: INT := 3;
+    c_delayBufferY_Reset: INT := 3;
+    c_delayBufferRegress: INT := 3;
+    Delay_Reset_ZCE: INT := 3;
+    delayTheta_DSTATE: ARRAY [0..1] OF REAL;
+    delayL_DSTATE: ARRAY [0..3] OF REAL;
+    delayPhi_DSTATE: ARRAY [0..2] OF REAL;
+    i0_ZCFCN_d_RISING: ZCFCN_d_RISING;
+    estimationError: REAL;
+    phi: ARRAY [0..1] OF REAL;
+    a1: REAL;
+    sqrtA0overA1: REAL;
+    b_kk: DINT;
+    rtb_theta: ARRAY [0..1] OF REAL;
+    rtb_L: ARRAY [0..3] OF REAL;
+    fTr_idx_1: REAL;
+    fTr_idx_0: REAL;
+    rtb_theta_tmp: REAL;
+    rtb_theta_tmp_0: REAL;
+END_VAR
+CASE ssMethodType OF
+    0: 
+        (* InitializeConditions for Delay: '<S3>/delayTheta' *)
+        icLoad := 1;
+        (* InitializeConditions for Delay: '<S3>/delayL' *)
+        icLoad_d := 1;
+        (* InitializeConditions for Delay: '<S3>/delayPhi' *)
+        icLoad_j := 1;
+        (* InitializeConditions for Delay: '<S3>/delayBufferU' *)
+        icLoad_n := 1;
+        (* InitializeConditions for Delay: '<S3>/delayBufferY' *)
+        icLoad_h := 1;
+        (* InitializeConditions for Delay: '<S23>/delayBufferRegressors' *)
+        icLoad_dq := 1;
+        (* SystemInitialize for MATLAB Function: '<S23>/rarx' *)
+        c_arxEstimator_not_e := FALSE;
+    1: 
+        (* Delay: '<S3>/delayTheta' *)
+        i0_ZCFCN_d_RISING(u0 := delayTheta_Reset_ZCE, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        delayTheta_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad := 1;
+        END_IF;
+        IF icLoad <> 0 THEN 
+            delayTheta_DSTATE[0] := 2.2204460492503131E-16;
+            delayTheta_DSTATE[1] := 2.2204460492503131E-16;
+        END_IF;
+        (* Delay: '<S3>/delayL' *)
+        i0_ZCFCN_d_RISING(u0 := delayL_Reset_ZCE, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        delayL_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_d := 1;
+        END_IF;
+        IF icLoad_d <> 0 THEN 
+            delayL_DSTATE[0] := 10.0;
+            delayL_DSTATE[1] := 0.0;
+            delayL_DSTATE[2] := 0.0;
+            delayL_DSTATE[3] := 10.0;
+        END_IF;
+        (* Delay: '<S3>/delayPhi' *)
+        i0_ZCFCN_d_RISING(u0 := delayPhi_Reset_ZCE, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        delayPhi_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_j := 1;
+        END_IF;
+        IF icLoad_j <> 0 THEN 
+            delayPhi_DSTATE[0] := 0.0;
+            delayPhi_DSTATE[1] := 0.0;
+            delayPhi_DSTATE[2] := 0.0;
+        END_IF;
+        (* Delay: '<S3>/delayBufferU' *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferU_Reset, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferU_Reset := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_n := 1;
+        END_IF;
+        (* End of Delay: '<S3>/delayBufferU' *)
+        
+        (* Delay: '<S3>/delayBufferY' *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferY_Reset, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferY_Reset := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_h := 1;
+        END_IF;
+        (* End of Delay: '<S3>/delayBufferY' *)
+        
+        (* Delay: '<S23>/delayBufferRegressors' *)
+        i0_ZCFCN_d_RISING(u0 := c_delayBufferRegress, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        c_delayBufferRegress := i0_ZCFCN_d_RISING.y1;
+        IF b_kk <> 0 THEN 
+            icLoad_dq := 1;
+        END_IF;
+        (* End of Delay: '<S23>/delayBufferRegressors' *)
+        
+        (* Delay: '<S25>/Delay' *)
+        i0_ZCFCN_d_RISING(u0 := Delay_Reset_ZCE, u1 := Reset);
+        b_kk := i0_ZCFCN_d_RISING.y0;
+        Delay_Reset_ZCE := i0_ZCFCN_d_RISING.y1;
+        (* MATLAB Function: '<S23>/rarx' incorporates:
+         *  DataTypeConversion: '<S3>/DataTypeConversionEnable'
+         *  Delay: '<S3>/delayL'
+         *  Delay: '<S3>/delayPhi'
+         *  Delay: '<S3>/delayTheta' *)
+        (* % Was a reset trigered? *)
+        (* MATLAB Function 'Recursive Estimation/rarx/rarx': '<S32>:1' *)
+        (* Copyright 2015-2018 The MathWorks, Inc. *)
+        (* Get the estimator object. Use the arx estimator with nb=0 *)
+        (* '<S32>:1:17' if isempty(arxEstimator) *)
+        IF  NOT c_arxEstimator_not_e THEN 
+            (* '<S32>:1:18' arxEstimator = recursiveEstimation.internal.rpoly.getEstimator(... *)
+            (* '<S32>:1:19'         'arx',... *)
+            (* '<S32>:1:20'         algorithmParams); *)
+            c_arxEstimator_not_e := TRUE;
+        END_IF;
+        (* If user triggered a reset, communicate this to the estimator *)
+        (* '<S32>:1:24' if hasTriggeredReset *)
+        (* Update algorithm states, perform estimation *)
+        (* % States *)
+        (* % new IO data *)
+        (* '<S32>:1:31' [phiMemory, uMemory, yMemory, regressorsMemory, ... *)
+        (* '<S32>:1:32'     theta, L, ... *)
+        (* '<S32>:1:33'     A, B, e] = ... *)
+        (* '<S32>:1:34'     arxEstimator.estimate(... *)
+        (* '<S32>:1:35'     phiMemory, uMemory, yMemory, regressorsMemory, theta, L, ... % States *)
+        (* '<S32>:1:36'     yMeas, uMeas,... % new IO data *)
+        (* '<S32>:1:37'     isEnabled, adg1, adg2, algorithmParams); *)
+        arxEstimator.OutputDataIterator.IteratorPosition := 1;
+        arxEstimator.InputDataIterator.IteratorPosition := 1;
+        arxEstimator.OutputDataIterator.IteratorPosition := MIN(IN1:=arxEstimator.OutputDataIterator.IteratorPosition + 1, 
+            IN2:=2);
+        arxEstimator.InputDataIterator.IteratorPosition := MIN(IN1:=arxEstimator.InputDataIterator.IteratorPosition + 1, 
+            IN2:=2);
+        rtb_L[0] := delayL_DSTATE[0];
+        rtb_L[1] := delayL_DSTATE[1];
+        rtb_L[2] := delayL_DSTATE[2];
+        rtb_L[3] := delayL_DSTATE[3];
+        rtb_theta[0] := delayTheta_DSTATE[0];
+        rtb_theta[1] := delayTheta_DSTATE[1];
+        estimationError := System_Output - ((delayPhi_DSTATE[0] * delayTheta_DSTATE[0]) + (delayPhi_DSTATE[2] * delayTheta_DSTATE[1])
+            );
+        IF Start_Identification <> 0.0 THEN 
+            fTr_idx_0 := (delayPhi_DSTATE[0] * delayL_DSTATE[0]) + (delayPhi_DSTATE[2] * delayL_DSTATE[1]);
+            phi[0] := 0.0;
+            rtb_theta[0] := 0.0;
+            fTr_idx_1 := (delayPhi_DSTATE[0] * delayL_DSTATE[2]) + (delayPhi_DSTATE[2] * delayL_DSTATE[3]);
+            a1 := (fTr_idx_1 * fTr_idx_1) + 1.0;
+            sqrtA0overA1 := SQRT(1.0 / a1);
+            rtb_theta[1] := delayL_DSTATE[3] * fTr_idx_1;
+            rtb_L[3] := (delayL_DSTATE[3] * sqrtA0overA1) - (0.0 / (sqrtA0overA1 * a1));
+            phi[1] := rtb_theta[1];
+            sqrtA0overA1 := a1;
+            a1 := (fTr_idx_0 * fTr_idx_0) + a1;
+            sqrtA0overA1 := SQRT(sqrtA0overA1 / a1);
+            fTr_idx_1 := sqrtA0overA1 * a1;
+            FOR b_kk := 0 TO 1 DO 
+                rtb_theta_tmp := rtb_L[1 - b_kk];
+                rtb_theta_tmp_0 := phi[1 - b_kk];
+                rtb_theta[1 - b_kk] := (rtb_theta_tmp * fTr_idx_0) + rtb_theta_tmp_0;
+                rtb_L[1 - b_kk] := (rtb_theta_tmp * sqrtA0overA1) - ((rtb_theta_tmp_0 * fTr_idx_0) / fTr_idx_1);
+                phi[1 - b_kk] := rtb_theta[1 - b_kk];
+            END_FOR;
+            rtb_theta[0] := rtb_theta[0] / a1;
+            rtb_theta[0] := (rtb_theta[0] * estimationError) + delayTheta_DSTATE[0];
+            rtb_theta[1] := ((rtb_theta[1] / a1) * estimationError) + delayTheta_DSTATE[1];
+        END_IF;
+        (* Update for Delay: '<S3>/delayPhi' incorporates:
+         *  MATLAB Function: '<S23>/rarx' *)
+        delayPhi_DSTATE[1] := delayPhi_DSTATE[0];
+        (* Outputs for Atomic SubSystem: '<S1>/Calculate DC Gain1' *)
+        (* Product: '<S2>/Divide' incorporates:
+         *  MATLAB Function: '<S23>/rarx'
+         *  Sum: '<S2>/A(z) Sum of Elements' *)
+        (* helper variables *)
+        Gain_Not_Filtered := rtb_theta[1] / (1.0 + rtb_theta[0]);
+        (* Saturate: '<S2>/Gain_Saturation' *)
+        IF Gain_Not_Filtered >= 1.5 THEN 
+            (* Outport: '<Root>/Gain_Not_Filtered' *)
+            Gain_Not_Filtered := 1.5;
+        ELSIF Gain_Not_Filtered <= 0.01 THEN 
+            (* Outport: '<Root>/Gain_Not_Filtered' *)
+            Gain_Not_Filtered := 0.01;
+        END_IF;
+        (* End of Saturate: '<S2>/Gain_Saturation' *)
+        (* End of Outputs for SubSystem: '<S1>/Calculate DC Gain1' *)
+        
+        (* Update for Delay: '<S3>/delayTheta' *)
+        icLoad := 0;
+        delayTheta_DSTATE[0] := rtb_theta[0];
+        delayTheta_DSTATE[1] := rtb_theta[1];
+        (* Update for Delay: '<S3>/delayL' *)
+        icLoad_d := 0;
+        delayL_DSTATE[0] := rtb_L[0];
+        delayL_DSTATE[1] := rtb_L[1];
+        delayL_DSTATE[2] := rtb_L[2];
+        delayL_DSTATE[3] := rtb_L[3];
+        (* Update for Delay: '<S3>/delayPhi' incorporates:
+         *  MATLAB Function: '<S23>/rarx' *)
+        icLoad_j := 0;
+        delayPhi_DSTATE[0] :=  -System_Output;
+        delayPhi_DSTATE[2] := System_Input;
+        (* Update for Delay: '<S3>/delayBufferU' *)
+        icLoad_n := 0;
+        (* Update for Delay: '<S3>/delayBufferY' *)
+        icLoad_h := 0;
+        (* Update for Delay: '<S23>/delayBufferRegressors' *)
+        icLoad_dq := 0;
+END_CASE;
+END_FUNCTION_BLOCK
